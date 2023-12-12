@@ -7,7 +7,7 @@ GREEN_CUBES = 13
 BLU_CUBES = 14
 
 
-def parse_game_file(input_file: TextIOWrapper) -> dict[int, dict[int, dict[str, int]]]:
+def parse_input_file(input_file: TextIOWrapper) -> dict[int, dict[int, dict[str, int]]]:
     """
     Parse a Day2 input file of AoC2023 into a dict.
 
@@ -78,7 +78,7 @@ def main() -> None:
     games = {}
 
     with open("input.txt", "r") as lines:
-        games = parse_game_file(lines)
+        games = parse_input_file(lines)
     answer = 0
 
     for game_id in games:

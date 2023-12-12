@@ -1,5 +1,5 @@
 # AOC23 D2p1: Cube Cunundrum
-from D2p1 import parse_game_file
+from D2p1 import parse_input_file
 
 COLORS = ["blue", "green", "red"]
 
@@ -25,7 +25,7 @@ def main() -> None:
     games = {}
 
     with open("input.txt", "r") as lines:
-        games = parse_game_file(lines)
+        games = parse_input_file(lines)
     answer = 0
 
     for game_id in games:
