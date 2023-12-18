@@ -1,7 +1,7 @@
 # AOC23 D9p2: Mirage Maintenance
 
 
-def reduce(sequence: list[int], past_sequence=[]) -> list | int:
+def reduce(sequence: list[int], past_sequence=[]) -> list[int]:
     new_sequence = []
     is_first = True if not past_sequence else False
 
@@ -20,7 +20,7 @@ def reduce(sequence: list[int], past_sequence=[]) -> list | int:
         for i in range(output_sequence.__len__()):
             output = output_sequence[i] - output
 
-        return output
+        return [output]
 
     return output_sequence
 
@@ -35,7 +35,7 @@ def main() -> None:
         str_sequence = line.split()
         sequence = [int(numbers) for numbers in str_sequence]
 
-        step = reduce(sequence, [])
+        step = reduce(sequence, [])[0]
         answer += step
 
     print(answer)
