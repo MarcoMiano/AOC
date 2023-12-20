@@ -1,4 +1,4 @@
-# AOC23 D12p1: Hot Springs
+# AOC23 D12p2: Hot Springs
 from functools import cache
 
 
