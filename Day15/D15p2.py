@@ -1,7 +1,5 @@
 # AOC23 D15p2: Lens Library
 from collections import defaultdict, OrderedDict
-import enum
-from pprint import pprint
 import re
 from typing import DefaultDict, OrderedDict
 
