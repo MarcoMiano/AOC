@@ -1,6 +1,5 @@
-# AOC23 D18p1: Lavaduct Lagoon
-from copy import deepcopy
-from math import gcd
+# AOC23 D18p2: Lavaduct Lagoon
+
 
 DIR = {"R": (1, 0), "D": (0, 1), "L": (-1, 0), "U": (0, -1)}
 
