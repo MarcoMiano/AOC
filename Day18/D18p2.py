@@ -5,11 +5,23 @@ from math import gcd
 DIR = {"R": (1, 0), "D": (0, 1), "L": (-1, 0), "U": (0, -1)}
 
 
+def convert_dig_plan(wrong_dig_plan: list[str]) -> list[str]:
+    dir_enc = {0: "R", 1: "D", 2: "L", 3: "U"}
+    dig_plan: list[str] = []
+    for line in wrong_dig_plan:
+        _, _, raw_instruction = line.split()
+        magnitude = int(raw_instruction[2:-2], 16)
+        direction = dir_enc[int(raw_instruction[-2])]
+        dig_plan.append(f"{direction} {magnitude}")
+
+    return dig_plan
+
+
 def get_vertices_perimeter(dig_plan: list[str]) -> tuple[list[tuple[int, int]], int]:
     vertices: list[tuple[int, int]] = [(0, 0)]
     perimeter = 0
     for line in dig_plan:
-        direction, magnitude, color = line.split()
+        direction, magnitude = line.split()
         magnitude = int(magnitude)
         perimeter += magnitude
 
@@ -33,8 +45,10 @@ def get_internal_area(vertices: list[tuple[int, int]]) -> int:
 
 
 def main() -> None:
-    with open("Day18\\input.txt") as f:
+    with open("Day18\\input-sm.txt") as f:
         dig_plan = f.read().strip().splitlines()
+
+    dig_plan = convert_dig_plan(dig_plan)
 
     vertices, perimeter = get_vertices_perimeter(dig_plan)
 
