@@ -11,7 +11,7 @@ def parse_file(input_file: list[str]) -> tuple[dict[str, tuple], list]:
     for workflow in raw_workflows:
         name, rules = workflow.split("{")
         rules = rules[:-1].split(",")
-        workflows[name] = tuple([rule for rule in rules])
+        workflows[name] = rules
 
     for part in raw_parts:
         ratings = part[1:-1].split(",")
