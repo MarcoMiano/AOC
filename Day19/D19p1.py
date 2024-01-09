@@ -21,12 +21,12 @@ def parse_file(input_file: list[str]) -> tuple[dict[str, tuple], list]:
     return workflows, parts
 
 
-def execute_workflows(workflows: dict[str, tuple], part: dict) -> bool:
-    def execute_workflow(workflow_t: tuple, part: dict) -> str:
+def execute_workflow(workflows: dict[str, tuple], part: dict) -> bool:
+    def parse_instruction(workflow_t: tuple, part: dict) -> str:
         workflow = deque(workflow_t)
         while workflow:
             raw_curr_inst = workflow.popleft()
-            if "<" in raw_curr_inst or ">" in raw_curr_inst:
+            if ":" in raw_curr_inst:
                 rating_cat = raw_curr_inst[0]
                 operator = raw_curr_inst[1]
                 rating_value, next_operation = raw_curr_inst[2:].split(":")
@@ -41,7 +41,7 @@ def execute_workflows(workflows: dict[str, tuple], part: dict) -> bool:
     end = False
     workflow_name = "in"
     while not end:
-        workflow_name = execute_workflow(workflows[workflow_name], part)
+        workflow_name = parse_instruction(workflows[workflow_name], part)
         if workflow_name in "AR":
             end = True
 
@@ -56,7 +56,7 @@ def main() -> None:
     ratings_sum = 0
 
     for part in parts:
-        if execute_workflows(workflows, part):
+        if execute_workflow(workflows, part):
             ratings_sum += sum(part.values())
 
     print(ratings_sum)
