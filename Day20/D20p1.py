@@ -31,41 +31,48 @@ class Conjunction(CommunicationModule):
         self.state = not all(self.inputs.values())
 
 
-def find_inputs(config: list[str], label: str) -> list[str]:
-    lines_found = [line.split(" -> ")[0] for line in config if label in line]
-    inputs = [mod_lbl[1:] for mod_lbl in lines_found if not label in mod_lbl]
-    return inputs
-
-
 def module_configurator(
     config: list[str],
 ) -> dict[str, tuple[CommunicationModule, list[str]]]:
     modules: dict[str, tuple[CommunicationModule, list[str]]] = dict()
 
+    def find_inputs(config: list[str], label: str) -> list[str]:
+        lines_found = [line.split(" -> ")[0] for line in config if label in line]
+        inputs = [mod_lbl[1:] for mod_lbl in lines_found if not label in mod_lbl]
+        return inputs
+
+    def find_output_module(config, modules):
+        output_modules = re.findall(r"\b[a-z]+\b", " ".join(config))
+        output_modules = Counter(output_modules)
+        output_modules = [
+            key
+            for key, count in output_modules.items()
+            if count == 1 and key != "broadcaster"
+        ]
+
+        for label in output_modules:
+            modules[label] = CommunicationModule(label), []
+
     for descriptor in config:
         module, outputs = descriptor.split(" -> ")
-        if "%" in module:
-            modules[module[1:]] = FlipFlop(module[1:]), outputs.split(", ")
-        elif "&" in module:
-            inputs = find_inputs(config, module[1:])
-            modules[module[1:]] = Conjunction(module[1:], inputs), outputs.split(", ")
-        elif module == "broadcaster":
-            modules["broadcaster"] = CommunicationModule("broadcaster"), outputs.split(
-                ", "
-            )
-        else:
+        outputs = outputs.split(", ")
+        if module == "broadcaster":
+            modules["broadcaster"] = CommunicationModule("broadcaster"), outputs
+            continue
+        if module[0].isalpha():
             raise ValueError(f"Module type of {module} is not allowed")
 
-    output_modules = re.findall(r"\b[a-z]+\b", " ".join(config))
-    output_modules = Counter(output_modules)
-    output_modules = [
-        key
-        for key, count in output_modules.items()
-        if count == 1 and key != "broadcaster"
-    ]
+        type_module = module[0]
+        label = module[1:]
 
-    for label in output_modules:
-        modules[label] = CommunicationModule(label), []
+        match type_module:
+            case "%":
+                modules[label] = FlipFlop(label), outputs
+            case "&":
+                inputs = find_inputs(config, label)
+                modules[label] = Conjunction(label, inputs), outputs
+
+    find_output_module(config, modules)
 
     return modules
 
@@ -82,7 +89,7 @@ def get_current_states(
     return states
 
 
-def execute_queue(
+def push_button(
     modules: dict[str, tuple[CommunicationModule, list[str]]]
 ) -> tuple[int, int]:
     low_signal_count = 1
@@ -98,7 +105,6 @@ def execute_queue(
         modules[destination][0].process_input(pulse, source)
         if not pulse or isinstance(modules[destination][0], Conjunction):
             for output in modules[destination][1]:
-                # print(f"append: {destination}, {output}")
                 signal_calls.append((destination, output))
 
         if pulse:
@@ -117,7 +123,7 @@ def main() -> None:
     high_signal_count = 0
 
     for _ in range(1000):
-        ls, hs = execute_queue(modules)
+        ls, hs = push_button(modules)
         low_signal_count += ls
         high_signal_count += hs
 
