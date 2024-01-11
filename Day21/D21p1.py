@@ -22,9 +22,9 @@ def find_adjacent_gardens(
             next_position = tuple(x + y for x, y in zip(position, direction))
             check_boundaries = (
                 next_position[0] >= 0
-                and next_position[0] <= row_count
+                and next_position[0] < row_count
                 and next_position[1] >= 0
-                and next_position[1] <= column_count
+                and next_position[1] < column_count
             )
             if (
                 garden_map[next_position[0]][next_position[1]] in ".S"
