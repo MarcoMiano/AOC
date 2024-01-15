@@ -1,7 +1,8 @@
 # AOC23 D22p1: Sand Slabs
 
-from collections import defaultdict
+from collections import defaultdict, deque
 from dataclasses import dataclass
+import queue
 import numpy as np
 
 
@@ -54,13 +55,9 @@ def parse_bricks(data: list[str]) -> list[Brick]:
     return bricks
 
 
-def main() -> None:
-    with open("Day22\\input.txt") as f:
-        snapshot = f.read().strip().splitlines()
-    bricks: list[Brick] = parse_bricks(snapshot)
-    bricks.sort()
+def find_upper_to_base_bricks(bricks: list[Brick]) -> dict[Brick, set]:
     bricks_at_level: dict[int, set[Brick]] = defaultdict(set)
-    upper_to_base_brick: dict[Brick, set[Brick]] = defaultdict(set)
+    upper_to_base_bricks: dict[Brick, set[Brick]] = defaultdict(set)
 
     min_x = max_x = 0
     min_y = max_y = 0
@@ -80,28 +77,56 @@ def main() -> None:
         height_map[y1 : y2 + 1, x1 : x2 + 1] = new_max_height
         bricks_at_level[new_max_height].add(brick)
 
-        upper_to_base_brick[brick].update(
+        upper_to_base_bricks[brick].update(
             base_brick
             for base_brick in bricks_at_level[old_max_height]
             if base_brick.area_intersecs(brick)
         )
+    return upper_to_base_bricks
 
-    critical_bricks = set()
+
+def find_base_to_upper_bricks(
+    bricks: list[Brick], upper_to_base_bricks: dict[Brick, set]
+) -> dict[Brick, set]:
     base_to_upper_bricks = {brick: set() for brick in bricks}
 
     for brick in bricks:
-        if len(upper_to_base_brick[brick]) == 1:
-            (base_brick,) = upper_to_base_brick[brick]
-            critical_bricks.add(base_brick)
-
-        for base_brick in upper_to_base_brick[brick]:
+        for base_brick in upper_to_base_bricks[brick]:
             base_to_upper_bricks[base_brick].add(brick)
+    return base_to_upper_bricks
 
-    assert len(upper_to_base_brick) == len(base_to_upper_bricks) == len(bricks)
 
-    safe_bricks = len(bricks) - len(critical_bricks)
+def main() -> None:
+    with open("Day22\\input.txt") as f:
+        snapshot = f.read().strip().splitlines()
+    bricks: list[Brick] = parse_bricks(snapshot)
+    bricks.sort()
 
-    print(safe_bricks)
+    upper_to_base_bricks = find_upper_to_base_bricks(bricks)
+    base_to_upper_bricks = find_base_to_upper_bricks(bricks, upper_to_base_bricks)
+
+    total_falling_bricks = 0
+
+    for brick in upper_to_base_bricks:
+        queue = deque(
+            upper
+            for upper in base_to_upper_bricks[brick]
+            if len(upper_to_base_bricks[upper]) == 1
+        )
+        falling = set(queue)
+        falling.add(brick)
+
+        while queue:
+            upper = queue.popleft()
+
+            for base in base_to_upper_bricks[upper] - falling:
+                if upper_to_base_bricks[base] < falling:
+                    queue.append(base)
+                    falling.add(base)
+
+        total_falling_bricks += len(falling) - 1
+
+    print(total_falling_bricks)
 
 
 if __name__ == "__main__":
