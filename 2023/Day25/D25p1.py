@@ -1,3 +1,5 @@
+# AOC23 D25p1: Snowverload
+
 import networkx as nx
 from networkx.algorithms.community import girvan_newman
 from typing import TypeAlias
