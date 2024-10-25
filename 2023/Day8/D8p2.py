@@ -57,7 +57,7 @@ def navigate(navigators: list[Navigator]) -> list[int]:
 
 
 def main() -> None:
-    with open("Day8\\input.txt") as f:
+    with open("2023//Day8//input.txt") as f:
         input_file = f.read().strip().split("\n")
 
     instructions = input_file.pop(0).strip()

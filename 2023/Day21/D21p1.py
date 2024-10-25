@@ -35,7 +35,7 @@ def find_adjacent_gardens(
 
 
 def main() -> None:
-    with open("Day21\\input.txt") as f:
+    with open("2023//Day21//input.txt") as f:
         garden_map = f.read().strip().splitlines()
     positions = set()
     positions.add(find_starting_point(garden_map))

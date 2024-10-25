@@ -108,7 +108,7 @@ def outside_tiles(maze: list[str]) -> set[tuple[int, int]]:
 
 
 def main() -> None:
-    with open("Day10\\input.txt") as f:
+    with open("2023//Day10//input.txt") as f:
         maze: list[str] = f.read().strip().splitlines()
 
     start_coords = find_starting_point(maze)

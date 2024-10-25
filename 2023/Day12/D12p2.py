@@ -27,7 +27,7 @@ def find_arrangements(config: str, numbers: tuple) -> int:
 
 
 def main() -> None:
-    with open("Day12\\input.txt") as f:
+    with open("2023//Day12//input.txt") as f:
         input_file = f.read().strip().splitlines()
 
     answer = 0

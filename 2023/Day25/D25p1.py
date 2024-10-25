@@ -10,7 +10,7 @@ nodes = set()
 edges = list()
 wiring: t_wiring = dict()
 
-with open("Day25//input.txt") as f:
+with open("2023//Day25//input.txt") as f:
     g_wiring = nx.Graph()
     for line in f.readlines():
         from_component = line.split(":")[0]

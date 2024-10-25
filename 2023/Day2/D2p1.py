@@ -77,7 +77,7 @@ def check_game(games: dict, game_id: int) -> int:
 def main() -> None:
     games = {}
 
-    with open("input.txt", "r") as lines:
+    with open("2023//Day2//input.txt", "r") as lines:
         games = parse_input_file(lines)
     answer = 0
 

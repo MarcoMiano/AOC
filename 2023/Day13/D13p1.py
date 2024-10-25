@@ -52,7 +52,7 @@ def get_reflections_sum(patterns: list[list[str]]) -> int:
 
 
 def main() -> None:
-    with open("Day13\\input.txt") as f:
+    with open("2023//Day13//input.txt") as f:
         input_file = deque(f.read().strip().splitlines())
 
     patterns: list[list[str]] = [[]]

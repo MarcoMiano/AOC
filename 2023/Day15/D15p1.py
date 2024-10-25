@@ -21,7 +21,7 @@ def get_checksum(strings: list[str]) -> int:
 
 
 def main() -> None:
-    with open("Day15\\input.txt") as f:
+    with open("2023//Day15//input.txt") as f:
         init_seq: list[str] = f.read().strip("\n").split(",")
     print(get_checksum(init_seq))
 

@@ -175,7 +175,7 @@ def print_heatmap(heatmap: list[list[bool]]) -> None:
 
 
 def main() -> None:
-    with open("Day16\\input.txt") as f:
+    with open("2023//Day16//input.txt") as f:
         contraption = f.read().strip().splitlines()
     rows = len(contraption)
     columns = len(contraption[0])

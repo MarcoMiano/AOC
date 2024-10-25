@@ -53,7 +53,7 @@ def get_hash(platform: list[str]) -> str:
 
 
 def main() -> None:
-    with open("Day14\\input.txt") as f:
+    with open("2023//Day14//input.txt") as f:
         platform = f.read().strip().splitlines()
 
     cycle_steps: dict[int, list[str]] = {}

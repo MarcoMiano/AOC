@@ -59,7 +59,7 @@ def find_loop(
 
 
 def main() -> None:
-    with open("Day10\\input.txt") as f:
+    with open("2023//Day10//input.txt") as f:
         maze: list[str] = f.read().strip().splitlines()
 
     start_coordinates = find_starting_point(maze)

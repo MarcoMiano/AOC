@@ -79,7 +79,7 @@ class Seed(object):
 
 
 def main() -> None:
-    with open("Day5\\input.txt") as f:
+    with open("2023//Day5//input.txt") as f:
         input_file = f.read().strip().split("\n")
 
     seeds: list[Seed] = list()

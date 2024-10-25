@@ -34,7 +34,7 @@ def written_number_to_int(string: str) -> int:
 
 answer = 0
 
-with open("./input.txt", "r") as lines:
+with open("2023//Day1//input.txt", "r") as lines:
     for line in lines:
         line = line.strip("\n")
         matches = re.findall(

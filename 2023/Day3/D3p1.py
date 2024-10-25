@@ -11,7 +11,7 @@ def check_neighbors(input_file: list[str], line_id: int, start: int, end: int) -
 
 
 def main() -> None:
-    with open("input.txt") as file:
+    with open("2023//Day3//input.txt") as file:
         input_file = file.read().strip().split("\n")
 
     answer = 0

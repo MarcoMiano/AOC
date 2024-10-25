@@ -115,7 +115,7 @@ def push_button(
 
 
 def main() -> None:
-    with open("Day20\\input.txt") as f:
+    with open("2023//Day20//input.txt") as f:
         config = f.read().strip().splitlines()
     modules = module_configurator(config)
 

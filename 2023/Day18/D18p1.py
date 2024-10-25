@@ -31,7 +31,7 @@ def get_internal_area(vertices: list[tuple[int, int]]) -> int:
 
 
 def main() -> None:
-    with open("Day18\\input.txt") as f:
+    with open("2023//Day18//input.txt") as f:
         dig_plan = f.read().strip().splitlines()
 
     vertices, perimeter = get_vertices_perimeter(dig_plan)

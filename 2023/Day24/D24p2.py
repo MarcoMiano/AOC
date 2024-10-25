@@ -18,7 +18,7 @@ def load_hails(file_path: str) -> t_hail:
 
 
 def main() -> None:
-    hails: t_hail = load_hails("Day24//input.txt")
+    hails: t_hail = load_hails("2023//Day24//input.txt")
     xr, yr, zr, vxr, vyr, vzr = sympy.symbols("xr, yr, zr, vxr, vyr, vzr")
     print(xr)
 

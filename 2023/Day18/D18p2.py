@@ -44,7 +44,7 @@ def get_internal_area(vertices: list[tuple[int, int]]) -> int:
 
 
 def main() -> None:
-    with open("Day18\\input-sm.txt") as f:
+    with open("2023//Day18//input-sm.txt") as f:
         dig_plan = f.read().strip().splitlines()
 
     dig_plan = convert_dig_plan(dig_plan)

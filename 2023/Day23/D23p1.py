@@ -96,7 +96,7 @@ async def stroll(
 
 
 async def main() -> None:
-    forest_map: t_map = load_map("Day23\\input.txt")
+    forest_map: t_map = load_map("2023//Day23//input.txt")
     print(len(forest_map))
     start_coord: tuple[int, int] = (0, 1)
     results: list[int] = await stroll(forest_map, start_coord)

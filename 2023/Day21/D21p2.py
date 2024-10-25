@@ -49,7 +49,7 @@ def solve_quadratic(row_count: int, quadratic_gardens: list[int], steps: int):
 
 
 def main() -> None:
-    with open("Day21\\input.txt") as f:
+    with open("2023//Day21//input.txt") as f:
         garden_map = f.read().strip().splitlines()
     positions = set()
     quadratic_steps = [65, 196, 327]

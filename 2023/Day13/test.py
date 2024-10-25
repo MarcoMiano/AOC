@@ -14,7 +14,7 @@ def mirrorpos(arr, axis=0, diff=0):
     return 0
 
 
-with open("Day13\\input.txt", "r") as file:
+with open("2023//Day13//input.txt", "r") as file:
     data = file.read().split("\n\n")
 for i in range(2):
     total = 0

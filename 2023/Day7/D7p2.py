@@ -51,7 +51,7 @@ def compare(x: str, y: str) -> int:
 
 
 def main() -> None:
-    with open("Day7\\input.txt") as f:
+    with open("2023//Day7//input.txt") as f:
         input_file = f.read().strip().split("\n")
 
     unranked_hands = []

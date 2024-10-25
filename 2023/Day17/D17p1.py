@@ -3,7 +3,7 @@ from heapq import heappop, heappush
 
 
 def main() -> None:
-    with open("Day17\\input.txt") as f:
+    with open("2023//Day17//input.txt") as f:
         city_map = f.read().splitlines()
 
     city_map = [list(map(int, line.strip())) for line in city_map]

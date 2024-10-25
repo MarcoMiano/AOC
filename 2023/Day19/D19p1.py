@@ -49,7 +49,7 @@ def execute_workflow(workflows: dict[str, tuple], part: dict) -> bool:
 
 
 def main() -> None:
-    with open("Day19\\input.txt") as f:
+    with open("2023//Day19//input.txt") as f:
         input_file = f.read().strip().split("\n\n")
 
     workflows, parts = parse_file(input_file)

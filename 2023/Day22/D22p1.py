@@ -55,7 +55,7 @@ def parse_bricks(data: list[str]) -> list[Brick]:
 
 
 def main() -> None:
-    with open("Day22\\input.txt") as f:
+    with open("2023//Day22//input.txt") as f:
         snapshot = f.read().strip().splitlines()
     bricks: list[Brick] = parse_bricks(snapshot)
     bricks.sort()

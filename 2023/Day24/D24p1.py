@@ -83,7 +83,7 @@ def find_intersection_2D(hails: list[Hail]) -> t_collisions:
 # if tx = ty = tz a collision will happen at t = tx = ty = tz
 # collision position at x = A.px0 + A.vx * t
 def main() -> None:
-    hails: list[Hail] = load_hails("Day24//input.txt")
+    hails: list[Hail] = load_hails("2023//Day24//input.txt")
     pprint(hails)
     collisions: t_collisions = find_intersection_2D(hails)
 

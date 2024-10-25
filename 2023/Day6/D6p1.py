@@ -22,7 +22,7 @@ def parse_input_file(input_file: list[str]) -> list:
 
 
 def main() -> None:
-    with open("Day6\\input.txt") as f:
+    with open("2023//Day6//input.txt") as f:
         input_file = f.read().strip().split("\n")
 
     races = parse_input_file(input_file)

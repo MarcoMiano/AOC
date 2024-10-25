@@ -4,7 +4,7 @@ from math import prod
 
 
 def main() -> None:
-    with open("Day19\\input.txt") as f:
+    with open("2023//Day19//input.txt") as f:
         sections = f.read().strip().split("\n\n")
 
     workflows = {}

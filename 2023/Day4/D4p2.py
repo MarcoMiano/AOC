@@ -58,7 +58,7 @@ def parse_input_file(input_file) -> Cards:
 
 
 def main() -> None:
-    with open("input.txt") as f:
+    with open("2023//Day4//input.txt") as f:
         input_file = f.read().strip().split("\n")
 
     cards = parse_input_file(input_file)

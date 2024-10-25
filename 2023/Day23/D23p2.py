@@ -104,7 +104,7 @@ def stroll(
 
 
 start = time.time()
-aoc_map: t_map = load_map("Day23\\input.txt")
+aoc_map: t_map = load_map("2023//Day23//input.txt")
 start_coord: t_coord = (0, 1)
 visited_coords: set[t_coord] = {start_coord}
 result: int = stroll(start_coord, visited_coords)

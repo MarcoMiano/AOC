@@ -22,7 +22,7 @@ def reduce(sequence: list[int], past_sequence=[]) -> list[int]:
 
 
 def main() -> None:
-    with open("Day9\\input.txt") as f:
+    with open("2023//Day9//input.txt") as f:
         input_file = f.read().strip().split("\n")
 
     answer = 0

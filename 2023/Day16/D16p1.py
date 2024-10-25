@@ -158,7 +158,7 @@ def list_or(list1: list[list[bool]], list2: list[list[bool]]) -> list[list[bool]
 
 
 def main() -> None:
-    with open("Day16\\input.txt") as f:
+    with open("2023//Day16\\input.txt") as f:
         contraption = f.read().strip().splitlines()
 
     heatmap = trace_beam(contraption=contraption)

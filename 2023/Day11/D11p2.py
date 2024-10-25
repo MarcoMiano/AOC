@@ -61,7 +61,7 @@ def find_shortest_paths(
 
 
 def main() -> None:
-    with open("Day11\\input.txt") as f:
+    with open("2023//Day11//input.txt") as f:
         universe = f.read().strip().splitlines()
 
     expanded_columns, expanded_rows = find_expanded_space(universe)

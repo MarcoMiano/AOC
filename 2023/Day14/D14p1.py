@@ -27,7 +27,7 @@ def get_column_load(segments: list[str], block_pos: deque[int]) -> int:
 
 
 def main() -> None:
-    with open("Day14\\input.txt") as f:
+    with open("2023//Day14//input.txt") as f:
         platform = f.read().strip().splitlines()
 
     platform = list(zip(*platform[::-1]))
