@@ -1,3 +1,4 @@
+# AOC22 D1p1: Calorie Counting
 def main() -> None:
     elves: list[int] = list()
     with open("2022//Day1//input.txt") as f:
