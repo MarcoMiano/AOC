@@ -1,4 +1,4 @@
-# AOC22 D1p1: Rock Paper Scissor
+# AOC22 D1p2: Rock Paper Scissor
 
 # A: Rock 1, B: Paper 2, C: Scissors 3
 # X: Lose 0, Y: Draw 3, Z: Win 6
