@@ -28,26 +28,20 @@ class FileSystem(object):
 
 def calc_dir_sizes(fs: FileSystem):
     todo: list[str] = ["/"]
-    # pprint(fs.directory_tab["wmsb"])
-    # input()
 
     while fs.directory_tab["/"].size == 0:
-        # print(f"full todo {todo}")
         d = todo[-1]
-        # print(d)
+
         sub_directories: list[tuple[str, int]] = [
             (sd, fs.directory_tab[sd].size)
             for sd in fs.directory_tab[d].sub_direcotories
         ]
-        # print(sub_directories)
-        # input()
+
         sub_dir_sizes: list[int] = [
             fs.directory_tab[sd].size for sd, _ in sub_directories
         ]
-        # print(f"sub_dir_sizes {sub_dir_sizes}")
-        # input()
+
         if not sub_directories or all(sub_dir_sizes):
-            # print("if")
             size = 0
             for file in fs.directory_tab[d].file_names:
                 size += fs.file_tab[file].size
@@ -60,31 +54,12 @@ def calc_dir_sizes(fs: FileSystem):
 
             fs.directory_tab[d].size = size
             todo.pop()
-            # print(f"popped: {todo.pop()}")
+
         else:
-            # print("else")
             for sd, sd_size in sub_directories:
-                # print(sd, sd_size)
                 if sd_size == 0:
                     todo.append(sd)
-                    # print(f"appended {sd}")
                     break
-
-        # directory = todo[-1]
-        # sub_dir_sizes = [
-        #     fs.directory_tab[sub_dir].size
-        #     for sub_dir in fs.directory_tab[directory].sub_direcotories
-        # ]
-        # if not fs.directory_tab[directory].sub_direcotories or all(sub_dir_sizes):
-        #     size = 0
-        #     for file in fs.directory_tab[directory].file_names:
-        #         size += fs.file_tab[file].size
-        #     for sub_directory in fs.directory_tab[directory].sub_direcotories:
-        #         size += fs.directory_tab[sub_directory].size
-        #     fs.directory_tab[directory].size = size
-        #     todo.remove(directory)
-        # else:
-        #     calc_dir_sizes(fs, todo)
 
 
 def main() -> None:
@@ -127,13 +102,14 @@ def main() -> None:
     # pprint(filesystem.directory_tab["wmsb"])
 
     calc_dir_sizes(filesystem)
-    print("done")
+    # pprint(filesystem.directory_tab)
 
     answer = 0
     for directory in list(filesystem.directory_tab.keys()):
         size = filesystem.directory_tab[directory].size
         if size <= 100000 and size > 0:
             answer += size
+            print(filesystem.directory_tab[directory].dir_name)
 
     print(answer)
 
