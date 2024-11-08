@@ -9,109 +9,79 @@ from dataclasses import dataclass
 class File(object):
     file_name: str
     size: int
-    directory_key: str
 
 
-@dataclass()
 class Directory(object):
-    dir_name: str
-    size: int
-    file_names: list[str]
-    sub_direcotories: list[str]
+    def __init__(self, dir_name) -> None:
+        self._name: str = dir_name
+        self._files: list[File] = []
+        self._sub_dirs: list[Directory] = []
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def parent_dir(self) -> "Directory":
+        return self._parent_dir
+
+    @parent_dir.setter
+    def parent_dir(self, p_dir: "Directory") -> None:
+        self._parent_dir = p_dir
+
+    @property
+    def directories(self) -> list["Directory"]:
+        return self._sub_dirs
+
+    def add_dir(self, new_dir: "Directory"):
+        self._sub_dirs.append(new_dir)
+        new_dir.parent_dir = self
+
+    def add_file(self, new_file: File):
+        self._files.append(new_file)
+
+    def get_dir(self, name: str) -> "Directory":
+        return next(dir for dir in self.directories if dir.name == name)
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__} (name={self.name},files={self.files} dirs={self.directories})"
 
 
-@dataclass()
-class FileSystem(object):
-    directory_tab: dict[str, Directory]
-    file_tab: dict[str, File]
-
-
-def calc_dir_sizes(fs: FileSystem):
-    todo: list[str] = ["/"]
-
-    while fs.directory_tab["/"].size == 0:
-        d = todo[-1]
-
-        sub_directories: list[tuple[str, int]] = [
-            (sd, fs.directory_tab[sd].size)
-            for sd in fs.directory_tab[d].sub_direcotories
-        ]
-
-        sub_dir_sizes: list[int] = [
-            fs.directory_tab[sd].size for sd, _ in sub_directories
-        ]
-
-        if not sub_directories or all(sub_dir_sizes):
-            size = 0
-            for file in fs.directory_tab[d].file_names:
-                size += fs.file_tab[file].size
-            for _, sd_size in sub_directories:
-                if sd_size == -1:
-                    continue
-                size += sd_size
-            if size == 0:
-                size = -1
-
-            fs.directory_tab[d].size = size
-            todo.pop()
-
-        else:
-            for sd, sd_size in sub_directories:
-                if sd_size == 0:
-                    todo.append(sd)
-                    break
+MAX_SIZE = 100000
 
 
 def main() -> None:
-    filesystem = FileSystem({}, {})
-    filesystem.directory_tab["/"] = Directory("/", 0, [], [])
-    pwd: list[str] = list()
+    root_dir = Directory("/")
+    current_dir = root_dir
 
-    input_path = os.path.dirname(__file__) + "\\input.txt"
+    input_path = os.path.dirname(__file__) + "\\input-sm.txt"
     with open(input_path) as f:
         input_file = f.readlines()
 
     for line in input_file:
         tokens: list[str] = line.strip("\n").split()
         if tokens[0] == "$":
-            if tokens[1] == "cd":
-                if tokens[2] == "..":
-                    pwd.pop()
+            if tokens[1] == "ls":
+                continue  # skip to next line
+
+            elif tokens[1] == "cd":  # change directory
+                if tokens[2] == "..":  # go pack to parent directory
+                    assert current_dir.name != "/", "Cannot go up from root"
+                    current_dir = current_dir.parent_dir
                 else:
-                    pwd.append(tokens[2])
-            elif tokens[1] == "ls":
-                continue
-        elif tokens[0] == "dir":
-            if tokens[1] in filesystem.directory_tab.keys():
-                continue
-            filesystem.directory_tab[tokens[1]] = Directory(tokens[1], 0, [], [])
-            filesystem.directory_tab[pwd[-1]].sub_direcotories.append(tokens[1])
-        elif tokens[0].isdigit():
-            if tokens[1] in filesystem.file_tab.keys():
-                continue
-            filesystem.file_tab[tokens[1]] = File(tokens[1], int(tokens[0]), pwd[-1])
-            filesystem.directory_tab[pwd[-1]].file_names.append(tokens[1])
+                    if tokens[2] != "/":
+                        current_dir = current_dir.get_dir(tokens[2])
+                    else:
+                        current_dir = root_dir
+            else:
+                assert False, f"{tokens[1]} is an invalid command"
+        else:  # we are in file listing mode
+            if tokens[0] == "dir":  # add a new direcotory
+                current_dir.add_dir(Directory(tokens[1]))
+            else:
+                current_dir.add_file(File(tokens[1], size=int(tokens[0])))
 
-    for d in list(filesystem.directory_tab.keys()):
-        if (
-            not filesystem.directory_tab[d].sub_direcotories
-            and not filesystem.directory_tab[d].file_names
-        ):
-            filesystem.directory_tab[d].size = -1
-
-    # pprint(filesystem.directory_tab["wmsb"])
-
-    calc_dir_sizes(filesystem)
-    # pprint(filesystem.directory_tab)
-
-    answer = 0
-    for directory in list(filesystem.directory_tab.keys()):
-        size = filesystem.directory_tab[directory].size
-        if size <= 100000 and size > 0:
-            answer += size
-            print(filesystem.directory_tab[directory].dir_name)
-
-    print(answer)
+    pprint(root_dir.directories)
 
 
 if __name__ == "__main__":
