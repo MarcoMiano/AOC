@@ -1,4 +1,5 @@
-# AOC22 D6p1: Tuning Trouble
+# AOC22 D7p1: No Space Left On Device
+# My adaptation of https://aoc.just2good.co.uk/2022/7
 
 import os
 from pprint import pprint
@@ -33,6 +34,16 @@ class Directory(object):
     def directories(self) -> list["Directory"]:
         return self._sub_dirs
 
+    @property
+    def files(self) -> list[File]:
+        return self._files
+
+    @property
+    def size(self) -> int:
+        return sum(file.size for file in self._files) + sum(
+            sub_dir.size for sub_dir in self._sub_dirs
+        )
+
     def add_dir(self, new_dir: "Directory"):
         self._sub_dirs.append(new_dir)
         new_dir.parent_dir = self
@@ -43,20 +54,38 @@ class Directory(object):
     def get_dir(self, name: str) -> "Directory":
         return next(dir for dir in self.directories if dir.name == name)
 
+    def get_all_dirs(self) -> list["Directory"]:
+        all_dirs = []
+        for directory in self.directories:
+            all_dirs.extend(directory.get_all_dirs())
+
+        all_dirs.extend(self.directories)
+        return all_dirs
+
+    def _print(self, iteration: int) -> str:
+        def tab(n):
+            return n * "\t"
+
+        result = (
+            tab(iteration)
+            + f"{self.__class__.__name__}\n{tab(iteration + 1)}"
+            + f"name={self.name}\n{tab(iteration + 1)}"
+            + f"size={self.size}\n{tab(iteration + 1)}"
+            + f"sub_dirs="
+            + (f"\n" if self._sub_dirs else f"NONE\n")
+        )
+
+        for sub_dir in self._sub_dirs:
+            result += tab(iteration + 1) + sub_dir._print(iteration=iteration + 1)
+        return result
+
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__} (name={self.name},files={self.files} dirs={self.directories})"
+        return self._print(0)
 
 
-MAX_SIZE = 100000
-
-
-def main() -> None:
+def file_parse(input_file: list[str]) -> Directory:
     root_dir = Directory("/")
     current_dir = root_dir
-
-    input_path = os.path.dirname(__file__) + "\\input-sm.txt"
-    with open(input_path) as f:
-        input_file = f.readlines()
 
     for line in input_file:
         tokens: list[str] = line.strip("\n").split()
@@ -81,7 +110,23 @@ def main() -> None:
             else:
                 current_dir.add_file(File(tokens[1], size=int(tokens[0])))
 
-    pprint(root_dir.directories)
+    return root_dir
+
+
+MAX_SIZE = 100000
+
+
+def main() -> None:
+    input_path = os.path.dirname(__file__) + "\\input.txt"
+    with open(input_path) as f:
+        input_file = f.readlines()
+
+    root_dir = file_parse(input_file)
+
+    small_dirs: list[Directory] = [
+        directory for directory in root_dir.get_all_dirs() if directory.size <= MAX_SIZE
+    ]
+    print(sum(directory.size for directory in small_dirs))
 
 
 if __name__ == "__main__":
