@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 # AOC22 D13p1: Distress Signal
-=======
-# AOC22 D11p1: Monkey in the Middle
->>>>>>> 07b3a669400ab420d7c5f88223f0265b47c8c814
+
 import os
 
 from typing import TypeAlias
