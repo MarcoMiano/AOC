@@ -16,7 +16,7 @@ def parse_input(input_path) -> list[list[int]]:
 
 
 def is_sorted(l: list) -> bool:
-    return all(a <= b for a, b in pairwise(l)) or all(a >= b for a, b in pairwise(l))
+    return all(a < b for a, b in pairwise(l)) or all(a > b for a, b in pairwise(l))
 
 
 def is_step_limited(l: list) -> bool:
