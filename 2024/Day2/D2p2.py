@@ -1,4 +1,4 @@
-# AOC24 D2p1: Red-Nosed Reports
+# AOC24 D2p2: Red-Nosed Reports
 
 import os
 
