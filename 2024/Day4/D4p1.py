@@ -50,7 +50,7 @@ def get_submatrix(matrix: list[list[str]], row: int, col: int) -> list[list[str]
     return [element for element in result if len(element) == 4]
 
 
-def check_xmas(matrix: list[list[str]], r: int = 0, c: int = 0, char: str = "X") -> int:
+def check_xmas(matrix: list[list[str]], char: str = "X") -> int:
     result = 0
     x_indices: list[tuple[int, int]] = get_indices(matrix, char)
     for xr, xc in x_indices:
