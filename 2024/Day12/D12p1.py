@@ -72,10 +72,6 @@ def parse_input(input_path: str) -> dict[str, Plots]:
     return garden
 
 
-def even_digits(x: int) -> bool:
-    return len(str(x)) % 2 == 0
-
-
 def main() -> None:
     input_path: str = os.path.dirname(__file__) + "\\input.txt"
     garden: dict[str, Plots] = parse_input(input_path)
