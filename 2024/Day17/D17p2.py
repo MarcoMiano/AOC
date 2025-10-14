@@ -20,9 +20,13 @@ class Cpu(object):
         self.reg_a: int = reg_a
         self.reg_b: int = reg_b
         self.reg_c: int = reg_c
+        self.reg_a0 = 0
+        self.reg_b0 = 0
+        self.reg_c0 = 0
         self.rom: list[int] = program
         self.pc: int = 0
-        self.output: list[int] = []
+        self.output: list[int] = [0 for _ in range(len(self.rom))]
+        self.out_cursor = 0
 
     def _fetch(self):
         opcode, operand = self.rom[self.pc], self.rom[self.pc + 1]
@@ -44,9 +48,14 @@ class Cpu(object):
             case _:
                 raise ValueError(f"Invalid combo operand: {operand}.")
 
+    def _out(self, o: int) -> None:
+        self.output[self.out_cursor] = o
+        self.out_cursor += 1
+
     def execute(self) -> None:
+        self.output = [0 for _ in range(len(self.rom))]
         self.pc = 0
-        self.output: list[int] = []
+        self.out_cursor = 0
         while self.pc < len(self.rom):
             opcode, operand = self._fetch()
             match opcode:
@@ -67,7 +76,7 @@ class Cpu(object):
                     self.reg_b ^= self.reg_c
                 case OPCODE.OUT:
                     # 5 Output: OUT.append(c_operand % 8)
-                    self.output.append(self._combo(operand) % 8)
+                    self._out(self._combo(operand) % 8)
                 case OPCODE.BDV:
                     # 6 Division: REG.B = REG.A // (2 ** c_operand)
                     self.reg_b = self.reg_a // (2 ** self._combo(operand))
@@ -76,15 +85,6 @@ class Cpu(object):
                     self.reg_c = self.reg_a // (2 ** self._combo(operand))
                 case _:
                     raise ValueError(f"Invalid opcode: {opcode}")
-
-    @property
-    def out(self) -> str:
-        if not self.output:
-            return ""
-        result: str = ""
-        for element in self.output:
-            result += str(element) + ","
-        return result[:-1]
 
 
 def parse_input(input_path: str):
@@ -97,33 +97,44 @@ def parse_input(input_path: str):
     return Cpu(reg_a, reg_b, reg_c, program)
 
 
+def bin48_tribits(n: int, other_string: str = "", length: int = 48) -> str:
+    fmt = "0" + str(length) + "b"
+    bits = format(n, fmt)
+    groups = [bits[i : i + 3] for i in range(0, length, 3)]
+    return "0b " + " ".join(groups) + other_string
+
+
+def list_to_octal(input_list: list[int]) -> int:
+    result = 0
+    for t, tribit in enumerate(input_list[::-1]):
+        result += tribit << (t * 3)
+    return result
+
+
 def main() -> None:
     input_path: str = os.path.dirname(__file__) + "\\input.txt"
     cpu: Cpu = parse_input(input_path)
-    i = 0o0000_0000_0000_0000
-    poss = deque()
-    const = 0o1000_0000_0000_0000
-    digit = 16
-    for l in range(8):
-        i = l * const >> (3 * (17 - digit))
-        cpu.reg_a = i
-        cpu.execute()
-        if cpu.output[digit - 17] == cpu.rom[digit - 1]:
-            poss.append((i, digit))
-            print(poss)
-    while poss:
-        i_old, digit = poss.pop()
-        print(f"0o{i_old:016o}")
-        digit -= 1
-        for l in range(8):
-            i = i_old + l * const << (3 * (17 - digit))
-            print(f"0o{i:016o}")
-            cpu.reg_a = i
+    queue: deque[tuple[list[int], int]] = deque()
+    queue.append(
+        ([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 15)
+    )  # start with empty state to find bit 15.
+    reg_try: list[int] = list()
+    solutions: list[int] = list()
+    while queue:
+        reg_try, tribit = queue.pop()
+        for test in range(0, 8):
+            reg_try[15 - tribit] = test
+            cpu.reg_a = list_to_octal(reg_try)
             cpu.execute()
-            print(cpu.out)
-            if cpu.output[digit - 17] == cpu.rom[digit - 1]:
-                poss.append((i, digit))
-                print(poss)
+            if cpu.output == cpu.rom:
+                solutions.append(list_to_octal(reg_try))
+                continue
+            if cpu.output[tribit:] == cpu.rom[tribit:]:
+                queue.append((reg_try.copy(), tribit - 1))
+    if solutions:
+        print(min(solutions))
+    else:
+        print("Solution NOT Found")
 
 
 if __name__ == "__main__":
