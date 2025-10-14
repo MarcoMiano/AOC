@@ -2,7 +2,6 @@
 import os
 import heapq
 from dataclasses import dataclass
-from pprint import pprint
 
 
 @dataclass(frozen=True)
@@ -113,7 +112,6 @@ def main() -> None:
     input_path: str = os.path.dirname(__file__) + "\\input.txt"
     inst: list[Vec2] = parse_input(input_path)
     maze: list[list[str]] = simulate(inst, 1024)
-    pprint(maze)
     start = Vec2(0, 0)
     goal = Vec2(70, 70)
     print(dijkstra(maze, start, goal))
